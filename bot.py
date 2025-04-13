@@ -1,51 +1,45 @@
-import os
-from dotenv import load_dotenv
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import (
-    ApplicationBuilder, CommandHandler, ContextTypes,
-    CallbackQueryHandler
-)
-from handler.anime import animeinfo, jadwalanime, waifu, quoteanime
+from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, MessageHandler, filters, ContextTypes
+from dotenv import load_dotenv
+import os
+
+from handlers.anime_today import anime_today
+from handlers.random_waifu import random_waifu
+from handlers.anime_quote import anime_quote
+from handlers.popular_anime import popular_anime
+from handlers.search_anime import search_anime
 
 load_dotenv()
-TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+TOKEN = os.getenv("BOT_TOKEN")
 
-# Menu utama dengan tombol
-async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
-        [InlineKeyboardButton("🌀 Anime Info", callback_data="animeinfo")],
-        [InlineKeyboardButton("🗓️ Jadwal Anime", callback_data="jadwalanime")],
-        [InlineKeyboardButton("👧 Waifu Random", callback_data="waifu")],
-        [InlineKeyboardButton("💬 Anime Quote", callback_data="quoteanime")],
+        [InlineKeyboardButton("Anime Hari Ini", callback_data='anime_today')],
+        [InlineKeyboardButton("Cari Anime", switch_inline_query_current_chat='')],
+        [InlineKeyboardButton("Random Waifu", callback_data='random_waifu')],
+        [InlineKeyboardButton("Quote Anime", callback_data='anime_quote')],
+        [InlineKeyboardButton("Anime Populer", callback_data='popular_anime')],
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text("Silakan pilih fitur:", reply_markup=reply_markup)
+    await update.message.reply_text("Selamat datang di Kato Chan Bot!", reply_markup=reply_markup)
 
-# Handler tombol
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
-    if query.data == "animeinfo":
-        await query.edit_message_text("Ketik perintah:\n/animeinfo <judul anime>")
-    elif query.data == "jadwalanime":
-        await jadwalanime(query, context)
-    elif query.data == "waifu":
-        await waifu(query, context)
-    elif query.data == "quoteanime":
-        await quoteanime(query, context)
+    data = query.data
 
-def main():
-    app = ApplicationBuilder().token(TOKEN).build()
-
-    app.add_handler(CommandHandler("menu", menu))
-    app.add_handler(CommandHandler("animeinfo", animeinfo))
-    app.add_handler(CommandHandler("jadwalanime", jadwalanime))
-    app.add_handler(CommandHandler("waifu", waifu))
-    app.add_handler(CommandHandler("quoteanime", quoteanime))
-    app.add_handler(CallbackQueryHandler(button_handler))
-
-    print("Kato Bot aktif!")
-    app.run_polling()
+    if data == 'anime_today':
+        await anime_today(update, context)
+    elif data == 'random_waifu':
+        await random_waifu(update, context)
+    elif data == 'anime_quote':
+        await anime_quote(update, context)
+    elif data == 'popular_anime':
+        await popular_anime(update, context)
 
 if __name__ == "__main__":
-    main()
+    app = ApplicationBuilder().token(TOKEN).build()
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("anime", search_anime))
+    app.add_handler(CallbackQueryHandler(button_handler))
+    app.run_polling()
