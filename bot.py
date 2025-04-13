@@ -17,7 +17,7 @@ TOKEN = os.getenv("BOT_TOKEN")
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         [InlineKeyboardButton("Anime Hari Ini", callback_data='anime_today')],
-        [InlineKeyboardButton("Cari Anime", switch_inline_query_current_chat='')],
+        [InlineKeyboardButton("Cari Anime", switch_inline_query_current_chat='/anime')],
         [InlineKeyboardButton("Random Waifu", callback_data='random_waifu')],
         [InlineKeyboardButton("Quote Anime", callback_data='anime_quote')],
         [InlineKeyboardButton("Anime Populer", callback_data='popular_anime')],
@@ -46,7 +46,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await genre_filter(update, context)
     elif data.startswith('genre_'):
         await genre_result(update, context)
-    elif data == 'menu':
+    elif data == 'start':
         await start(update, context)
 
 async def unknown_command(update: Update, context: ContextTypes.DEFAULT_TYPE):

@@ -19,5 +19,5 @@ async def genre_result(update: Update, context: ContextTypes.DEFAULT_TYPE):
     for anime in data['data']:
         text += f"• {anime['title']} ({anime['type']})\n"
     keyboard = [[InlineKeyboardButton("Kembali ke Genre", callback_data="genre_select")],
-                [InlineKeyboardButton("Kembali ke Menu", callback_data="menu")]]
+                [InlineKeyboardButton("Kembali ke Menu", callback_data="start")]]
     await query.edit_message_text(text, reply_markup=InlineKeyboardMarkup(keyboard))

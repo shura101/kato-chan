@@ -13,5 +13,5 @@ async def anime_today(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text += f"• {anime['title']} - {anime['broadcast']['time'] or 'N/A'}\n"
     text += "\nJangan lupa nonton ya~!"
 
-    keyboard = [[InlineKeyboardButton("Kembali ke Menu", callback_data="menu")]]
+    keyboard = [[InlineKeyboardButton("Kembali ke Menu", callback_data="start")]]
     await update.callback_query.edit_message_text(text, reply_markup=InlineKeyboardMarkup(keyboard))

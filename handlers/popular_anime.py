@@ -10,5 +10,5 @@ async def popular_anime(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text += f"{i}. {anime['title']} ⭐ (Score: {anime['score']})\n"
     text += "\nYang mana favoritmu~?"
 
-    keyboard = [[InlineKeyboardButton("Kembali ke Menu", callback_data="menu")]]
+    keyboard = [[InlineKeyboardButton("Kembali ke Menu", callback_data="start")]]
     await update.callback_query.edit_message_text(text, reply_markup=InlineKeyboardMarkup(keyboard))
