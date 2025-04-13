@@ -10,30 +10,26 @@ async def animeinfo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     query = " ".join(context.args)
-    url = f"{API_BASE}/anime?q={query}&limit=1"
-    response = requests.get(url).json()
-
+    response = requests.get(f"{API_BASE}/anime?q={query}&limit=1").json()
     if response.get("data"):
         anime = response["data"][0]
         title = anime["title"]
         synopsis = anime.get("synopsis", "Tidak ada sinopsis.")
-        rating = anime.get("rating", "N/A")
         score = anime.get("score", "N/A")
-        image_url = anime["images"]["jpg"]["image_url"]
+        rating = anime.get("rating", "N/A")
+        img = anime["images"]["jpg"]["image_url"]
 
         msg = f"*{title}*\nRating: {rating}\nSkor: {score}\n\n{synopsis}"
-        await update.message.reply_photo(photo=image_url, caption=msg, parse_mode="Markdown")
+        await update.message.reply_photo(img, caption=msg, parse_mode="Markdown")
     else:
         await update.message.reply_text("Anime tidak ditemukan.")
 
 async def jadwalanime(update: Update, context: ContextTypes.DEFAULT_TYPE):
     from datetime import datetime
     hari = datetime.now().strftime('%A').lower()
-    url = f"{API_BASE}/schedules?filter={hari}"
-    response = requests.get(url).json()
-
+    response = requests.get(f"{API_BASE}/schedules?filter={hari}").json()
     if response.get("data"):
-        daftar = response["data"][:5]  # tampilkan 5 anime pertama
+        daftar = response["data"][:5]
         msg = f"Jadwal rilis anime hari ini ({hari.title()}):\n\n"
         for anime in daftar:
             msg += f"• {anime['title']}\n"
@@ -47,12 +43,8 @@ async def waifu(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def quoteanime(update: Update, context: ContextTypes.DEFAULT_TYPE):
     res = requests.get("https://animechan.xyz/api/random").json()
-    quote = res.get("quote")
-    character = res.get("character")
-    anime = res.get("anime")
-
-    if quote and character and anime:
-        msg = f"\"{quote}\"\n\n- {character} ({anime})"
+    if all(key in res for key in ("quote", "character", "anime")):
+        msg = f"\"{res['quote']}\"\n\n- {res['character']} ({res['anime']})"
         await update.message.reply_text(msg)
     else:
-        await update.message.reply_text("Gagal mengambil quote anime.")
+        await update.message.reply_text("Gagal mengambil quote.")
