@@ -46,13 +46,13 @@ async def waifu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_photo(photo=res["url"], caption="Waifumu siap menemani, Tuan Andre!")
 
 async def quoteanime(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    url = "https://api.kata-mutiara.xyz/api/quote?lang=id"
-    res = requests.get(url).json()
+    res = requests.get("https://animechan.xyz/api/random").json()
+    quote = res.get("quote")
+    character = res.get("character")
+    anime = res.get("anime")
 
-    if res.get("data"):
-        quote = res["data"]["quote"]
-        author = res["data"]["author"]
-        msg = f"\"{quote}\"\n\n- {author}"
+    if quote and character and anime:
+        msg = f"\"{quote}\"\n\n- {character} ({anime})"
         await update.message.reply_text(msg)
     else:
-        await update.message.reply_text("Gagal mendapatkan quote. Coba lagi nanti.")
+        await update.message.reply_text("Gagal mengambil quote anime.")

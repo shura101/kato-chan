@@ -1,14 +1,16 @@
 import os
 from dotenv import load_dotenv
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import (ApplicationBuilder, CommandHandler, ContextTypes,
-                          MessageHandler, filters, CallbackQueryHandler)
+from telegram.ext import (
+    ApplicationBuilder, CommandHandler, ContextTypes,
+    CallbackQueryHandler
+)
 from handlers.anime import animeinfo, jadwalanime, waifu, quoteanime
 
 load_dotenv()
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 
-# Menu utama
+# Menu utama dengan tombol interaktif
 async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         [
@@ -30,14 +32,14 @@ async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     reply_markup = InlineKeyboardMarkup(keyboard)
     await update.message.reply_text("Silakan pilih fitur yang tersedia:", reply_markup=reply_markup)
 
-# Handler tombol menu
+# Handler untuk tombol menu
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
     data = query.data
 
     if data == "animeinfo":
-        await query.edit_message_text("Silakan ketik perintah:\n/animeinfo <judul anime>")
+        await query.edit_message_text("Ketik perintah: /animeinfo <judul>")
     elif data == "jadwalanime":
         await jadwalanime(update, context)
     elif data == "waifu":
@@ -45,7 +47,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif data == "quoteanime":
         await quoteanime(update, context)
     elif data == "programming":
-        await query.edit_message_text("Fitur *Programming* sedang dikembangkan... tunggu ya!", parse_mode="Markdown")
+        await query.edit_message_text("Fitur *Programming* sedang dikembangkan...", parse_mode="Markdown")
     elif data == "trading":
         await query.edit_message_text("Fitur *Trading & Investasi* segera hadir!", parse_mode="Markdown")
     elif data == "help":
@@ -61,18 +63,21 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     else:
         await query.edit_message_text("Perintah tidak dikenali.")
 
-# Fungsi utama
+# Fungsi utama menjalankan bot
 def main():
     app = ApplicationBuilder().token(TOKEN).build()
 
+    # Command handler
     app.add_handler(CommandHandler("menu", menu))
     app.add_handler(CommandHandler("animeinfo", animeinfo))
     app.add_handler(CommandHandler("jadwalanime", jadwalanime))
     app.add_handler(CommandHandler("waifu", waifu))
     app.add_handler(CommandHandler("quoteanime", quoteanime))
+
+    # Button handler
     app.add_handler(CallbackQueryHandler(button_handler))
 
-    print("Bot is running...")
+    print("Kato Bot siap melayani, Tuan Andre!")
     app.run_polling()
 
 if __name__ == "__main__":
