@@ -17,7 +17,7 @@ TOKEN = os.getenv("BOT_TOKEN")
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
         [InlineKeyboardButton("Anime Hari Ini", callback_data='anime_today')],
-        [InlineKeyboardButton("Cari Anime", switch_inline_query_current_chat='/anime')],
+        [InlineKeyboardButton("Cari Anime")],
         [InlineKeyboardButton("Random Waifu", callback_data='random_waifu')],
         [InlineKeyboardButton("Quote Anime", callback_data='anime_quote')],
         [InlineKeyboardButton("Anime Populer", callback_data='popular_anime')],
