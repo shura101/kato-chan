@@ -4,7 +4,7 @@ from telegram.ext import ContextTypes
 
 async def search_anime(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args:
-        await update.message.reply_text("Kirim judul anime, contoh: /anime Naruto")
+        await update.message.reply_text("Ketik judul anime setelah /anime ya, contohnya: /anime Naruto")
         return
     query = " ".join(context.args)
     res = requests.get(f"https://api.jikan.moe/v4/anime?q={query}&limit=1")
