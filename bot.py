@@ -1,8 +1,8 @@
 import logging
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler
-from handlers.menu import start, handle_menu
-from handlers.search_anime import search_anime
-from handlers.nsfw import nsfw_command
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, ChatMemberHandler
+from handlers.welcome import welcome_new_member
+from handlers.antilink import check_anti_link
+from handlers.admin_commands import mute, unmute
 from dotenv import load_dotenv
 import os
 
@@ -12,11 +12,11 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 logging.basicConfig(level=logging.INFO)
 app = Application.builder().token(BOT_TOKEN).build()
 
-app.add_handler(CommandHandler("start", start))
-app.add_handler(CommandHandler("anime", search_anime))
-app.add_handler(CommandHandler("nsfw", nsfw_command))
-app.add_handler(CallbackQueryHandler(handle_menu))
+app.add_handler(ChatMemberHandler(welcome_new_member, ChatMemberHandler.CHAT_MEMBER))
+app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, check_anti_link))
+app.add_handler(CommandHandler("mute", mute))
+app.add_handler(CommandHandler("unmute", unmute))
 
 if __name__ == "__main__":
-    print("Bot is running...")
+    print("Bot running...")
     app.run_polling()
