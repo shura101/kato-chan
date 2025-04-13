@@ -1,7 +1,7 @@
 import logging
 import requests
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler, MessageHandler, Filters
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters
 from dotenv import load_dotenv
 import os
 
@@ -74,9 +74,10 @@ def handle_message(update: Update, context):
         update.message.reply_text(f"Error: {e}")
 
 def main():
-    updater = Updater(TELEGRAM_BOT_TOKEN)
-    dispatcher = updater.dispatcher
-
+    application = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
+    
+    application.add_handler(CommandHandler("start", start))
+   
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CallbackQueryHandler(anime, pattern='^anime$'))
     dispatcher.add_handler(CallbackQueryHandler(crypto, pattern='^crypto$'))
@@ -86,6 +87,7 @@ def main():
     dispatcher.add_handler(CallbackQueryHandler(back_to_menu, pattern='^back_to_menu$'))
     dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, handle_message))
 
+    application.run_polling()
     updater.start_polling()
     updater.idle()
 
