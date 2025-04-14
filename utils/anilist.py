@@ -1,34 +1,25 @@
 import requests
 
-def search_anime(query: str):
+def get_anime_info(title):
     url = "https://graphql.anilist.co"
-    headers = {"Content-Type": "application/json"}
-    payload = {
-        "query": """
-        query ($search: String) {
-          Media(search: $search, type: ANIME) {
-            title {
-              romaji
-            }
-            episodes
-            averageScore
-            description(asHtml: false)
-            siteUrl
-          }
+    query = """
+    query ($search: String) {
+      Media(search: $search, type: ANIME) {
+        title {
+          romaji
+          english
+          native
         }
-        """,
-        "variables": {"search": query}
+        episodes
+        status
+        averageScore
+        siteUrl
+      }
     }
-
-    response = requests.post(url, json=payload, headers=headers)
+    """
+    variables = {"search": title}
+    
+    response = requests.post(url, json={"query": query, "variables": variables})
     if response.status_code == 200:
-        data = response.json().get("data", {}).get("Media", {})
-        return {
-            "title": data.get("title", {}).get("romaji", "Tidak diketahui"),
-            "episodes": data.get("episodes", "???"),
-            "score": data.get("averageScore", "???"),
-            "description": data.get("description", "Deskripsi tidak tersedia."),
-            "url": data.get("siteUrl", "")
-        }
-    else:
-        return None
+        return response.json()["data"]["Media"]
+    return None

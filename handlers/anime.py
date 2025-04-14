@@ -1,35 +1,37 @@
 from telegram import Update
 from telegram.ext import ContextTypes
-from utils.waifu import get_waifu_image  # Untuk gambar waifu
+from utils.anilist import get_anime_info
+from utils.waifu import get_waifu_image
 
-# Menu utama /anime yang menampilkan pilihan untuk sub-perintah
 async def anime_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = (
         "Menu Anime:\n"
-        "/info_anime - Informasi tentang anime\n"
-        "/waifu - Gambar waifu\n"
+        "/info_anime <judul> - Info anime berdasarkan judul\n"
+        "/waifu - Gambar waifu acak"
     )
     await update.message.reply_text(text)
 
 async def info_anime(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Menampilkan informasi tentang anime tertentu."""
     if context.args:
-        anime_name = " ".join(context.args)
-        info = f"Informasi tentang anime: {anime_name}"  # Ganti dengan logika pencarian anime
-        await update.message.reply_text(info)
+        title = " ".join(context.args)
+        anime = get_anime_info(title)
+        if anime:
+            response = (
+                f"**{anime['title']['romaji']}** ({anime['title']['english']})\n"
+                f"Episodes: {anime['episodes']}\n"
+                f"Status: {anime['status']}\n"
+                f"Score: {anime['averageScore']}%\n"
+                f"[Lihat di Anilist]({anime['siteUrl']})"
+            )
+            await update.message.reply_text(response, parse_mode="Markdown")
+        else:
+            await update.message.reply_text("Anime tidak ditemukan.")
     else:
-        await update.message.reply_text("Silakan sebutkan nama anime untuk mencari informasi!")
+        await update.message.reply_text("Contoh: /info_anime naruto")
 
-async def waifu_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Menampilkan gambar waifu berdasarkan mode (SFW atau NSFW)."""
-    if len(context.args) > 0 and context.args[0].lower() == "nsfw":
-        mode = "nsfw"
-    else:
-        mode = "sfw"
-    
-    # Ambil gambar waifu
-    url = get_waifu_image(mode)
-    if url:
-        await update.message.reply_photo(photo=url, caption=f"Mode: {mode.upper()} | Waifu")
+async def waifu(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    image_url = get_waifu_image(nsfw=False)
+    if image_url:
+        await update.message.reply_photo(photo=image_url, caption="Waifu hari ini")
     else:
         await update.message.reply_text("Gagal mengambil gambar waifu.")
