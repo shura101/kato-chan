@@ -33,6 +33,6 @@ async def info_anime(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def waifu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     image_url = get_waifu_image(nsfw=False)
     if image_url:
-        await update.message.reply_photo(photo=image_url, caption="Waifu hari ini"
+        await update.message.reply_photo(photo=image_url, caption="Waifu hari ini (≧∇≦)/")
     else:
         await update.message.reply_text("Gagal mengambil gambar waifu.")
