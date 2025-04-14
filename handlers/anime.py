@@ -7,8 +7,9 @@ from utils.anilist import get_anime_by_genre
 async def anime_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = (
         "Menu Anime:\n"
-        "/info_anime <judul> - Info anime berdasarkan judul\n"
-        "/waifu - Gambar waifu acak\n" 
+        "/info_anime <judul> - Info anime\n"
+        "/waifu - Gambar waifu acak\n"
+        "/genre - Anime Genre\n\n"
         "/menu - Kembali ke menu awal"
     )
     await update.message.reply_text(text)
