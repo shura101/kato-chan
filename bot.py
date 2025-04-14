@@ -8,7 +8,8 @@ load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
 
 # Import handlers
-from handlers.anime import anime_menu, info_anime, waifu, anime_genre
+from handlers.anime import anime_menu, info_anime, waifu
+from handlers.anime import anime_genre
 from handlers.crypto import crypto_menu
 from handlers.coding import coding_menu
 from handlers.unknown import unknown

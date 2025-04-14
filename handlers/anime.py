@@ -1,8 +1,7 @@
 from telegram import Update
 from telegram.ext import ContextTypes
-from utils.anilist import get_anime_info
+from utils.anilist import get_anime_info, get_anime_by_genre
 from utils.waifu import get_waifu_image
-from utils.anilist import get_anime_by_genre
 
 async def anime_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = (
