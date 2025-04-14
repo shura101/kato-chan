@@ -36,7 +36,7 @@ if __name__ == '__main__':
     app.add_handler(CommandHandler("anime", anime_menu))  # Menu utama /anime
     app.add_handler(CommandHandler("info_anime", info_anime))  # Sub-perintah info_anime
     app.add_handler(CommandHandler("waifu", waifu))  # Sub-perintah waifu
-    app.add_handler(CommandHandler("anime_genre", anime_genre)) # Sub-Perintah Anime Genre
+    app.add_handler(CommandHandler("genre", anime_genre)) # Sub-Perintah Anime Genre
     
     app.add_handler(CommandHandler("menu", back_to_menu)) # Kembali ke menu
     
