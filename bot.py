@@ -32,14 +32,13 @@ if __name__ == '__main__':
     # Menambahkan handler
     app.add_handler(CommandHandler("start", start))
     
-    # Menu Anime
-    app.add_handler(CommandHandler("anime", anime_menu))  # Menu utama /anime
-    app.add_handler(CommandHandler("info_anime", info_anime))  # Sub-perintah info_anime
-    app.add_handler(CommandHandler("waifu", waifu))  # Sub-perintah waifu
-    app.add_handler(CommandHandler("genre", anime_genre)) # Sub-Perintah Anime Genre
-    
-    app.add_handler(CommandHandler("menu", back_to_menu)) # Kembali ke menu
-    
+    # Menu Anime CallbackQueryHandlers
+    application.add_handler(CallbackQueryHandler(info_anime_callback, pattern="^info_anime$"))
+    application.add_handler(CallbackQueryHandler(anime_genre_callback, pattern="^anime_genre$"))
+    application.add_handler(CallbackQueryHandler(waifu_callback, pattern="^waifu$"))
+    application.add_handler(CallbackQueryHandler(anime_quote_callback, pattern="^anime_quote$"))
+    application.add_handler(CallbackQueryHandler(main_menu_callback, pattern="^main_menu$"))
+
     # Crypto
     app.add_handler(CommandHandler("crypto", crypto_menu))
     
