@@ -12,6 +12,7 @@ from handlers.anime import anime_menu
 from handlers.crypto import crypto_menu
 from handlers.coding import coding_menu
 from handlers.unknown import unknown
+from handlers.anime import anime_menu, waifu_command  # pastikan waifu_command diimpor
 
 # Start command
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -30,6 +31,7 @@ if __name__ == '__main__':
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("anime", anime_menu))
+    app.add_handler(CommandHandler("waifu", waifu_command))
     app.add_handler(CommandHandler("crypto", crypto_menu))
     app.add_handler(CommandHandler("coding", coding_menu))
     app.add_handler(MessageHandler(filters.COMMAND, unknown))
