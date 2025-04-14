@@ -3,16 +3,26 @@ from telegram.ext import ContextTypes
 from utils.anilist import get_anime_info
 from utils.waifu import get_waifu_image
 from utils.anilist import get_anime_by_genre
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.ext import ContextTypes
 
 async def anime_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    text = (
-        "Menu Anime:\n"
-        "/info_anime <judul> - Info anime\n"
-        "/waifu - Gambar waifu acak\n"
-        "/genre - Anime Genre\n\n"
-        "/menu - Kembali ke menu awal"
-    )
-    await update.message.reply_text(text)
+    keyboard = [
+        [
+            InlineKeyboardButton("🎬 Info Anime", callback_data="info_anime"),
+            InlineKeyboardButton("🎭 Genre Anime", callback_data="anime_genre"),
+        ],
+        [
+            InlineKeyboardButton("👩‍🦰 Waifu Random", callback_data="waifu"),
+            InlineKeyboardButton("🎉 Anime Quote", callback_data="anime_quote"),
+        ],
+        [
+            InlineKeyboardButton("🔙 Kembali ke Menu Utama", callback_data="main_menu")
+        ]
+    ]
+
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    await update.message.reply_text("Pilih fitur anime yang ingin kamu jelajahi:", reply_markup=reply_markup)
 
 async def info_anime(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if context.args:
