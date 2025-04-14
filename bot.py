@@ -8,7 +8,7 @@ load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
 
 # Import handlers
-from handlers.anime import anime_menu, info_anime, waifu
+from handlers.anime import anime_menu, info_anime, waifu, anime_genre
 from handlers.crypto import crypto_menu
 from handlers.coding import coding_menu
 from handlers.unknown import unknown
@@ -31,11 +31,19 @@ if __name__ == '__main__':
 
     # Menambahkan handler
     app.add_handler(CommandHandler("start", start))
+    
+    # Menu Anime
     app.add_handler(CommandHandler("anime", anime_menu))  # Menu utama /anime
     app.add_handler(CommandHandler("info_anime", info_anime))  # Sub-perintah info_anime
     app.add_handler(CommandHandler("waifu", waifu))  # Sub-perintah waifu
-    app.add_handler(CommandHandler("menu", back_to_menu))
+    app.add_handler(CommandHandler("anime_genre", anime_genre)) # Sub-Perintah Anime Genre
+    
+    app.add_handler(CommandHandler("menu", back_to_menu)) # Kembali ke menu
+    
+    # Crypto
     app.add_handler(CommandHandler("crypto", crypto_menu))
+    
+    # Coding
     app.add_handler(CommandHandler("coding", coding_menu))
 
     # Tangani perintah tidak dikenal

@@ -2,6 +2,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 from utils.anilist import get_anime_info
 from utils.waifu import get_waifu_image
+from utils.anilist import get_anime_by_genre
 
 async def anime_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = (
@@ -36,3 +37,11 @@ async def waifu(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_photo(photo=image_url, caption="Waifu hari ini (≧∇≦)/")
     else:
         await update.message.reply_text("Gagal mengambil gambar waifu.")
+        
+async def anime_genre(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if context.args:
+        genre = " ".join(context.args)
+        result = await get_anime_by_genre(genre)
+        await update.message.reply_text(result)
+    else:
+        await update.message.reply_text("Contoh penggunaan: /anime_genre action")
