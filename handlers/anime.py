@@ -7,7 +7,8 @@ async def anime_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = (
         "Menu Anime:\n"
         "/info_anime <judul> - Info anime berdasarkan judul\n"
-        "/waifu - Gambar waifu acak"
+        "/waifu - Gambar waifu acak\n" 
+        "/menu - Kembali ke menu awal"
     )
     await update.message.reply_text(text)
 
