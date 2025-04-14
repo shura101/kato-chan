@@ -1,4 +1,4 @@
-from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
+from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, MessageHandler, filters
 import os
 from dotenv import load_dotenv
@@ -7,28 +7,31 @@ from dotenv import load_dotenv
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
 
+# Import handlers
+from handlers.anime import anime_menu
+from handlers.crypto import crypto_menu
+from handlers.coding import coding_menu
+from handlers.unknown import unknown
+
 # Start command
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    keyboard = [
-        [InlineKeyboardButton("Anime", callback_data="menu_anime")],
-        [InlineKeyboardButton("Crypto", callback_data="menu_crypto")],
-        [InlineKeyboardButton("Coding", callback_data="menu_coding")]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text(
-        "Halo, aku Kato Chan! Pilih menu di bawah ini:",
-        reply_markup=reply_markup
+    text = (
+        "Halo, aku Kato Chan!\n"
+        "Ketik salah satu perintah berikut:\n\n"
+        "/anime - Fitur seputar anime\n"
+        "/crypto - Harga & info crypto\n"
+        "/coding - Bantu deteksi error koding"
     )
-
-# Unknown message handler
-async def unknown(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Maaf, aku tidak mengerti perintah itu. Ketik /start untuk melihat menu.")
+    await update.message.reply_text(text)
 
 # Main function
 if __name__ == '__main__':
     app = ApplicationBuilder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("anime", anime_menu))
+    app.add_handler(CommandHandler("crypto", crypto_menu))
+    app.add_handler(CommandHandler("coding", coding_menu))
     app.add_handler(MessageHandler(filters.COMMAND, unknown))
 
     print("Kato Chan Bot is running...")
