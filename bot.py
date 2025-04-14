@@ -8,11 +8,10 @@ load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
 
 # Import handlers
-from handlers.anime import anime_menu
+from handlers.anime import anime_menu, info_anime, waifu_command
 from handlers.crypto import crypto_menu
 from handlers.coding import coding_menu
 from handlers.unknown import unknown
-from handlers.waifu import waifu_command  # Pastikan ada file waifu.py dengan fungsi waifu_command
 
 # Start command
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -22,8 +21,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "/anime - Fitur seputar anime\n"
         "/crypto - Harga & info crypto\n"
         "/coding - Bantu deteksi error koding\n"
-        "/waifu - Gambar waifu SFW\n"
-        "/waifu nsfw - Gambar waifu NSFW"
     )
     await update.message.reply_text(text)
 
@@ -33,8 +30,9 @@ if __name__ == '__main__':
 
     # Menambahkan handler
     app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("anime", anime_menu))
-    app.add_handler(CommandHandler("waifu", waifu_command))  # Pastikan ada fungsi waifu_command
+    app.add_handler(CommandHandler("anime", anime_menu))  # Menu utama anime
+    app.add_handler(CommandHandler("anime info_anime", info_anime))  # Info anime
+    app.add_handler(CommandHandler("anime waifu", waifu_command))  # Waifu anime
     app.add_handler(CommandHandler("crypto", crypto_menu))
     app.add_handler(CommandHandler("coding", coding_menu))
 
