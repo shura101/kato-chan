@@ -37,8 +37,8 @@ async def waifu(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_photo(photo=image_url, caption="Waifu hari ini (≧∇≦)/")
     else:
         await update.message.reply_text("Gagal mengambil gambar waifu.")
-        
- async def anime_genre(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+async def anime_genre(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args:
         await update.message.reply_text("Contoh penggunaan: `/genre action`", parse_mode='Markdown')
         return
